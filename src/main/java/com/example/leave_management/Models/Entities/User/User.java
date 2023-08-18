@@ -27,7 +27,9 @@ public class User implements UserDetails {
     private String userName;
     private String email;
     private String password;
-
+//    private Integer sickBalance;
+//    private Integer earnedBalance;
+//    private Integer negetiveBalance;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -65,4 +67,10 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
+
+
+
 }
