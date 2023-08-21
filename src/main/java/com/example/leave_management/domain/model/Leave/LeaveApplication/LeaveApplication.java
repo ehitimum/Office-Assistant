@@ -1,5 +1,6 @@
 package com.example.leave_management.domain.model.Leave.LeaveApplication;
 
+import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
 import com.example.leave_management.domain.model.User.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,13 +17,23 @@ import java.time.LocalDate;
 @Entity
 public class LeaveApplication {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long leaveApplicationId;
+
     private LocalDate leave_begin;
     private LocalDate leave_end;
-    private Status status;
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "leave_type_id",
+            referencedColumnName = "leaveTypeId"
+    )
+    private LeaveType leaveTypeId;
+    @Enumerated(EnumType.STRING)
+    private LeaveStatus leaveStatus;
     private String remarks;
-    @OneToOne(
+    @ManyToOne(
             cascade = CascadeType.ALL
     )
     @JoinColumn(

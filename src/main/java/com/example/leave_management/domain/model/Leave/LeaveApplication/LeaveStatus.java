@@ -1,6 +1,6 @@
 package com.example.leave_management.domain.model.Leave.LeaveApplication;
 
-public enum Status {
+public enum LeaveStatus {
     PENDING,
     APPROVED,
     REJECTED
