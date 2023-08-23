@@ -1,6 +1,7 @@
 package com.example.leave_management.dto;
 
 import com.example.leave_management.domain.model.User.Role;
+import com.example.leave_management.domain.model.User.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,10 @@ public class UserDTO {
         private int earnedLeaveBalance;
         private int negativeBalance;
 
+
+        public UserDTO(User user) {
+                this.userId = user.getUserId();
+                this.userName = user.getUsername();
+        }
 
 }

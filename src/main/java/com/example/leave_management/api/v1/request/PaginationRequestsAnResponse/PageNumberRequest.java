@@ -1,4 +1,4 @@
-package com.example.leave_management.api.v1.request.UserList;
+package com.example.leave_management.api.v1.request.PaginationRequestsAnResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

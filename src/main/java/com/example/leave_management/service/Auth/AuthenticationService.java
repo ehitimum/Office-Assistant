@@ -1,7 +1,6 @@
 package com.example.leave_management.service.Auth;
 
-import com.example.leave_management.api.v1.request.UserList.PageNumberRequest;
-import com.example.leave_management.api.v1.request.UserList.PaginatedUserResponse;
+import com.example.leave_management.api.v1.request.PaginationRequestsAnResponse.PageNumberRequest;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.UserRepository;

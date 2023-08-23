@@ -3,14 +3,12 @@ package com.example.leave_management.api.v1.controller;
 
 import com.example.leave_management.api.v1.request.Auth.AuthenticationRequest;
 import com.example.leave_management.api.v1.request.Auth.AuthenticationResponse;
-import com.example.leave_management.api.v1.request.UserList.PageNumberRequest;
-import com.example.leave_management.api.v1.request.UserList.PaginatedUserResponse;
+import com.example.leave_management.api.v1.request.PaginationRequestsAnResponse.PageNumberRequest;
 import com.example.leave_management.dto.UserDTO;
 import com.example.leave_management.service.Auth.AuthenticationService;
 import com.example.leave_management.api.v1.request.Auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
