@@ -1,6 +1,8 @@
 package com.example.leave_management.domain.model.User;
 
 
+import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,11 +29,12 @@ public class User implements UserDetails {
     private String userName;
     private String email;
     private String password;
-//    private Integer sickBalance;
-//    private Integer earnedBalance;
-//    private Integer negetiveBalance;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private LeaveBalance leaveBalance;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
