@@ -38,4 +38,10 @@ public class AuthController {
 
         return ResponseEntity.ok(userDTOs);
     }
+    
+    @GetMapping("/yearly-leave/{userId}")
+    public ResponseEntity<UserDTO> getYearlyLeaveBalance(@PathVariable Long userId){
+        UserDTO userDTO = authenticationService.showUserLeaves(userId);
+        return ResponseEntity.ok(userDTO);
+    }
 }

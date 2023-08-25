@@ -2,15 +2,13 @@ package com.example.leave_management.dto;
 
 import com.example.leave_management.domain.model.User.Role;
 import com.example.leave_management.domain.model.User.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+//@RequiredArgsConstructor
 public class UserDTO {
 
         private Long userId;
@@ -21,10 +19,14 @@ public class UserDTO {
         private int earnedLeaveBalance;
         private int negativeBalance;
 
-
         public UserDTO(User user) {
-                this.userId = user.getUserId();
-                this.userName = user.getUsername();
+                this.userId = getUserId();
+                this.userName = getUserName();
+                this.email = getEmail();
+                this.role = getRole();
+                this.sickLeaveBalance = getSickLeaveBalance();
+                this.earnedLeaveBalance = getEarnedLeaveBalance();
+                this.negativeBalance = getNegativeBalance();
         }
 
 }
