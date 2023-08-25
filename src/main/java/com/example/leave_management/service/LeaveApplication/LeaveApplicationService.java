@@ -3,9 +3,9 @@ package com.example.leave_management.service.LeaveApplication;
 import com.example.leave_management.api.v1.request.LeaveApplication.ApplicationSubmissonResponse;
 import com.example.leave_management.api.v1.request.LeaveApplication.LeaveApplicationRequest;
 import com.example.leave_management.api.v1.request.LeaveApplication.updateApplicationReq;
-import com.example.leave_management.api.v1.request.PaginationRequestsAnResponse.PageNumberRequest;
 import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveApplication;
 import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
+import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.LeaveApplicationRepository;
 import com.example.leave_management.domain.repository.LeaveTypeRepository;
@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,33 +74,55 @@ public class LeaveApplicationService {
         return ApplicationSubmissonResponse.builder().response("The Application is"+request.getStatus()).build();
     }
 
-    public List<LeaveApplicationDTO> getALlPendingApplications(PageNumberRequest paginationRequest) {
-        var pageNumber = paginationRequest.getCurrentPageNumber();
-        var pageSize = 5; // Number of users per page
-
+    public List<LeaveApplicationDTO> getALlPendingApplications(int pageNumber) {
+        var pageSize = 5;
         Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-
-        Page<LeaveApplication> allPendingApplications = repository.findAll(pageRequest);
-
+        Page<LeaveApplication> allPendingApplications = repository.findPendingApplicationsByUserId(pageRequest);
         String message = "Successfully retrieved user list with pagination.";
-
-        List<LeaveApplicationDTO> leaveApplicationDTO = allPendingApplications.getContent().stream()
+        return allPendingApplications.getContent().stream()
                 .map(this::convertToLeaveApplicationDTO)
                 .collect(Collectors.toList());
-
-        return leaveApplicationDTO;
     }
 
     private LeaveApplicationDTO convertToLeaveApplicationDTO(LeaveApplication application) {
-        UserDTO userDTO = new UserDTO(application.getUser());
         return LeaveApplicationDTO.builder()
                 .leaveApplicationId(application.getLeaveApplicationId())
                 .leaveBegin(application.getLeave_begin())
                 .leaveEnd(application.getLeave_end())
-                .leaveTypeId(application.getLeaveTypeId())
+                .leaveTypeId(application.getLeaveTypeId().getLeaveTypeId())
+                .leaveTypeName(application.getLeaveTypeId().getLeaveTypeName())
                 .leaveStatus(application.getLeaveStatus())
                 .remarks(application.getRemarks())
-                .userDTO(UserDTO.builder().userId(application.getUser().getUserId()).build())
+                .userId(application.getUser().getUserId())
+                .user(userBuild(application.getUser()))
+                .days(ChronoUnit.DAYS.between(application.getLeave_begin(),application.getLeave_end()))
                 .build();
+    }
+
+    public UserDTO userBuild(User user){
+        LeaveBalance leaveBalance = user.getLeaveBalance();
+        int sickLeaveBalance = leaveBalance != null ? leaveBalance.getSickLeaveBalance() : 0;
+        int earnedLeaveBalance = leaveBalance != null ? leaveBalance.getEarnedLeaveBalance() : 0;
+        int negativeBalance = leaveBalance != null ? leaveBalance.getNegativeBalance() : 0;
+        return UserDTO.builder()
+                .userId(user.getUserId())
+                .userName(user.getUserName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .sickLeaveBalance(sickLeaveBalance)
+                .earnedLeaveBalance(earnedLeaveBalance)
+                .negativeBalance(negativeBalance)
+                .build();
+    }
+
+
+    public List<LeaveApplicationDTO> getAllApplicationsOfAUser(Long id, int pageNumber) {
+        var pageSize = 5;
+        Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        Page<LeaveApplication> allPendingApplications = repository.findApplicationsByUserId(id, pageRequest);
+        String message = "Successfully retrieved user list with pagination.";
+        return allPendingApplications.getContent().stream()
+                .map(this::convertToLeaveApplicationDTO)
+                .collect(Collectors.toList());
     }
 }

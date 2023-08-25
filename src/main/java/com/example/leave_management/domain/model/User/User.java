@@ -71,9 +71,7 @@ public class User implements UserDetails {
         return true;
     }
 
-
-
-
-
-
+    public String getUserName() {
+        return userName;
+    }
 }

@@ -5,25 +5,29 @@ import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
 import com.example.leave_management.domain.model.User.Role;
 import com.example.leave_management.domain.model.User.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+//@RequiredArgsConstructor
 public class LeaveApplicationDTO {
     private Long leaveApplicationId;
     private LocalDate leaveBegin;
     private LocalDate leaveEnd;
-    private LeaveType leaveTypeId;
+    private Long leaveTypeId;
+    private String leaveTypeName;
     private LeaveStatus leaveStatus;
     private String remarks;
-    private UserDTO userDTO;
+    private Long userId;
+    private Long days;
+    private UserDTO user;
+
+
 }
 
 

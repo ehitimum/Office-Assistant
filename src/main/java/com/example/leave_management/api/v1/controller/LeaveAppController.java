@@ -13,12 +13,13 @@ import com.example.leave_management.dto.UserDTO;
 import com.example.leave_management.service.LeaveApplication.LeaveApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/Leave")
 @RequiredArgsConstructor
 public class LeaveAppController {
     private final LeaveApplicationService leaveApplicationService;
@@ -32,10 +33,17 @@ public class LeaveAppController {
         return ResponseEntity.ok(leaveApplicationService.updateApplicationRequest(request));
     }
 
-    @GetMapping("/pending-approval")
+    @GetMapping("/pending-approval/{pageId}")
     public ResponseEntity<List<LeaveApplicationDTO>> getAllPendingApplications(
-            @RequestBody PageNumberRequest paginationRequest) {
-        List<LeaveApplicationDTO> leaveApplicationDTOS = leaveApplicationService.getALlPendingApplications(paginationRequest);
+            @PathVariable int pageId) {
+        List<LeaveApplicationDTO> leaveApplicationDTOS = leaveApplicationService.getALlPendingApplications(pageId);
         return ResponseEntity.ok(leaveApplicationDTOS);
     }
+
+    @GetMapping("/Application-List/{userId}&{pageId}")
+    public ResponseEntity<List<LeaveApplicationDTO>> getAllApplicationsByID(@PathVariable Long userId, @PathVariable int pageId){
+        List<LeaveApplicationDTO> leaveApplicationDTOS = leaveApplicationService.getAllApplicationsOfAUser(userId,pageId);
+        return ResponseEntity.ok(leaveApplicationDTOS);
+    }
+
 }

@@ -90,10 +90,20 @@ public class AuthenticationService {
     }
 
     private UserDTO convertToUserDTO(User user) {
+        return getUserDTO(user);
+    }
+
+    public UserDTO showUserLeaves(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return getUserDTO(user);
+    }
+
+    private UserDTO getUserDTO(User user) {
         LeaveBalance leaveBalance = user.getLeaveBalance();
         return new UserDTO(
                 user.getUserId(),
-                user.getUsername(),
+                user.getUserName(),
                 user.getEmail(),
                 user.getRole(),
                 leaveBalance != null ? leaveBalance.getSickLeaveBalance() : 0,
