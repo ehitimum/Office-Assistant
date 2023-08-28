@@ -1,8 +1,8 @@
 package com.example.leave_management.service.LeaveApplication;
 
-import com.example.leave_management.api.v1.request.LeaveApplication.ApplicationSubmissonResponse;
-import com.example.leave_management.api.v1.request.LeaveApplication.LeaveApplicationRequest;
-import com.example.leave_management.api.v1.request.LeaveApplication.updateApplicationReq;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.ApplicationSubmissonResponse;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.LeaveApplicationRequest;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.updateApplicationReq;
 import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveApplication;
 import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
@@ -10,8 +10,8 @@ import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.LeaveApplicationRepository;
 import com.example.leave_management.domain.repository.LeaveTypeRepository;
 import com.example.leave_management.domain.repository.UserRepository;
-import com.example.leave_management.dto.LeaveApplicationDTO;
-import com.example.leave_management.dto.UserDTO;
+import com.example.leave_management.dto.EntityDTO.LeaveApplicationDTO;
+import com.example.leave_management.dto.EntityDTO.UserDTO;
 import com.example.leave_management.service.LeaveBalance.LeaveBalanceService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;

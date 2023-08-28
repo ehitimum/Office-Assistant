@@ -1,4 +1,4 @@
-package com.example.leave_management.api.v1.request.Auth;
+package com.example.leave_management.dto.RequestAndResponseDTO.LeaveBalance;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
-    private String email;
-    String password;
+public class CustomLeaveBalanceSetResponse {
+    private String response;
 }

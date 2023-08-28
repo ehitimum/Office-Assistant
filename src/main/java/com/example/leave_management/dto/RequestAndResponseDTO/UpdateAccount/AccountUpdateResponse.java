@@ -1,4 +1,4 @@
-package com.example.leave_management.api.v1.request.PaginationRequestsAnResponse;
+package com.example.leave_management.dto.RequestAndResponseDTO.UpdateAccount;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageNumberRequest {
-    private int currentPageNumber;
+public class AccountUpdateResponse {
+    private String msg;
 }

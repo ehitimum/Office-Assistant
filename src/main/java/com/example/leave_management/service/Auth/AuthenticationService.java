@@ -1,15 +1,18 @@
 package com.example.leave_management.service.Auth;
 
-import com.example.leave_management.api.v1.request.PaginationRequestsAnResponse.PageNumberRequest;
+import com.example.leave_management.dto.RequestAndResponseDTO.PaginationRequestsAnResponse.PageNumberRequest;
+import com.example.leave_management.dto.RequestAndResponseDTO.UpdateAccount.UpdatePasswordReq;
+import com.example.leave_management.dto.RequestAndResponseDTO.UpdateAccount.UpdateUserNameReq;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.UserRepository;
-import com.example.leave_management.api.v1.request.Auth.AuthenticationRequest;
-import com.example.leave_management.api.v1.request.Auth.AuthenticationResponse;
-import com.example.leave_management.api.v1.request.Auth.RegisterRequest;
-import com.example.leave_management.dto.UserDTO;
+import com.example.leave_management.dto.RequestAndResponseDTO.Auth.AuthenticationRequest;
+import com.example.leave_management.dto.RequestAndResponseDTO.Auth.AuthenticationResponse;
+import com.example.leave_management.dto.RequestAndResponseDTO.Auth.RegisterRequest;
+import com.example.leave_management.dto.EntityDTO.UserDTO;
 import com.example.leave_management.security.JwtService;
 import com.example.leave_management.service.LeaveBalance.LeaveBalanceService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,6 +31,7 @@ import java.util.stream.Collectors;
 public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final LeaveBalanceService leaveBalanceService;
@@ -112,4 +117,20 @@ public class AuthenticationService {
         );
     }
 
+    @Transactional
+    public UserDTO updateUserName(Long userId, UpdateUserNameReq request) {
+        User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+        user.setUserName(request.getUserName());
+        userRepository.save(user);
+        return getUserDTO(user);
+    }
+    @Transactional
+    public UserDTO updatePasswordField(Long userId, UpdatePasswordReq request) {
+        User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+        if(passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            userRepository.save(user);
+        }
+        return getUserDTO(user);
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.leave_management.service.LeaveType;
 
-import com.example.leave_management.api.v1.request.LeaveType.LeaveTypeCreationResponse;
-import com.example.leave_management.api.v1.request.LeaveType.NewLeaveType;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveType.LeaveTypeCreationResponse;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveType.NewLeaveType;
 import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
 import com.example.leave_management.domain.repository.LeaveTypeRepository;
 import org.springframework.stereotype.Service;

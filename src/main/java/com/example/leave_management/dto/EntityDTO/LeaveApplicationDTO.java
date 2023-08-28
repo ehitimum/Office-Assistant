@@ -1,14 +1,9 @@
-package com.example.leave_management.dto;
+package com.example.leave_management.dto.EntityDTO;
 
 import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveStatus;
-import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
-import com.example.leave_management.domain.model.User.Role;
-import com.example.leave_management.domain.model.User.User;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Data
 @Builder

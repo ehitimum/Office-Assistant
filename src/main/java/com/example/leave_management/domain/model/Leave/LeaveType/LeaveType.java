@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class LeaveType {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long leaveTypeId;
     private String leaveTypeName;
 }

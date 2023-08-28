@@ -1,7 +1,6 @@
 package com.example.leave_management.service.LeaveBalance;
 
-import com.example.leave_management.api.v1.request.LeaveBalance.CustomBalanceSetter;
-import com.example.leave_management.api.v1.request.LeaveBalance.CustomLeaveBalanceSetResponse;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveBalance.CustomLeaveBalanceSetResponse;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.LeaveBalanceRepository;
@@ -62,17 +61,12 @@ public class LeaveBalanceService {
 
         for (LeaveBalance userBalance : allLeaveBalances) {
             int currentMonth = LocalDate.now().getMonthValue();
-
             if (currentMonth <= 10) {
-                // January to October
                 userBalance.setEarnedLeaveBalance(userBalance.getEarnedLeaveBalance() + 1);
             } else if (currentMonth == 11) {
-                // November
                 userBalance.setSickLeaveBalance(5);
                 userBalance.setEarnedLeaveBalance(0);
             }
-
-            // If negative balance is present, adjust earned leave balance
             if (userBalance.getNegativeBalance() < 0) {
                 int earnedToAdjust = Math.min(-userBalance.getNegativeBalance(), userBalance.getEarnedLeaveBalance());
                 userBalance.setEarnedLeaveBalance(userBalance.getEarnedLeaveBalance() - earnedToAdjust);

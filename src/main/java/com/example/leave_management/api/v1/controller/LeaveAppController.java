@@ -1,19 +1,12 @@
 package com.example.leave_management.api.v1.controller;
 
-import com.example.leave_management.api.v1.request.Auth.AuthenticationResponse;
-import com.example.leave_management.api.v1.request.Auth.RegisterRequest;
-import com.example.leave_management.api.v1.request.LeaveApplication.ApplicationSubmissonResponse;
-import com.example.leave_management.api.v1.request.LeaveApplication.GetAllPendingApplicationsResponse;
-import com.example.leave_management.api.v1.request.LeaveApplication.LeaveApplicationRequest;
-import com.example.leave_management.api.v1.request.LeaveApplication.updateApplicationReq;
-import com.example.leave_management.api.v1.request.PaginationRequestsAnResponse.PageNumberRequest;
-import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveApplication;
-import com.example.leave_management.dto.LeaveApplicationDTO;
-import com.example.leave_management.dto.UserDTO;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.ApplicationSubmissonResponse;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.LeaveApplicationRequest;
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.updateApplicationReq;
+import com.example.leave_management.dto.EntityDTO.LeaveApplicationDTO;
 import com.example.leave_management.service.LeaveApplication.LeaveApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

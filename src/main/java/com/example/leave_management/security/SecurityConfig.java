@@ -27,9 +27,29 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**","/api/v1/Leave/**","/webjars/swagger-ui/**",
-                        "/swagger-ui/**", "/v3/api-docs/**")
+                .requestMatchers(
+                        "/api/v1/auth/authenticate",
+                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui/**",
+                        "/webjars/**",
+                        "/swagger-ui.html")
                 .permitAll()
+                .requestMatchers("/api/v1/auth/register",
+                       "/api/v1/auth/create-leave-type" ).hasAuthority("SUPERADMIN")
+                .requestMatchers("/api/v1/Leave/pending-approval",
+                        "/api/v1/Leave/pending-approval/**").hasAnyAuthority("ADMIN", "SUPERADMIN")
+                .requestMatchers("/api/v1/auth/changeUserName/**",
+                        "api/v1/auth/changePassword/**",
+                        "api/v1/auth/yearly-leave/**",
+                        "api/v1/auth/paged",
+                        "/api/v1/Leave/leave-application",
+                        "/api/v1/Leave/Application-List/**")
+                .hasAnyAuthority("EMPLOYEE", "ADMIN", "SUPERADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -45,4 +65,5 @@ public class SecurityConfig {
     }
 
 }
+
 

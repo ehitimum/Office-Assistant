@@ -1,4 +1,4 @@
-package com.example.leave_management.api.v1.request.LeaveBalance;
+package com.example.leave_management.dto.RequestAndResponseDTO.LeaveType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomLeaveBalanceSetResponse {
-    private String response;
+public class LeaveTypeCreationResponse {
+    private String msg;
 }

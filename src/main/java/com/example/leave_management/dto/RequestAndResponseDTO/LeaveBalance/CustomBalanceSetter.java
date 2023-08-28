@@ -1,4 +1,4 @@
-package com.example.leave_management.api.v1.request.LeaveBalance;
+package com.example.leave_management.dto.RequestAndResponseDTO.LeaveBalance;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

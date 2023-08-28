@@ -1,12 +1,15 @@
 package com.example.leave_management.api.v1.controller;
 
 
-import com.example.leave_management.api.v1.request.Auth.AuthenticationRequest;
-import com.example.leave_management.api.v1.request.Auth.AuthenticationResponse;
-import com.example.leave_management.api.v1.request.PaginationRequestsAnResponse.PageNumberRequest;
-import com.example.leave_management.dto.UserDTO;
+import com.example.leave_management.dto.RequestAndResponseDTO.Auth.AuthenticationRequest;
+import com.example.leave_management.dto.RequestAndResponseDTO.Auth.AuthenticationResponse;
+import com.example.leave_management.dto.RequestAndResponseDTO.PaginationRequestsAnResponse.PageNumberRequest;
+import com.example.leave_management.dto.RequestAndResponseDTO.UpdateAccount.UpdatePasswordReq;
+import com.example.leave_management.dto.RequestAndResponseDTO.UpdateAccount.UpdateUserNameReq;
+import com.example.leave_management.dto.EntityDTO.UserDTO;
 import com.example.leave_management.service.Auth.AuthenticationService;
-import com.example.leave_management.api.v1.request.Auth.RegisterRequest;
+import com.example.leave_management.dto.RequestAndResponseDTO.Auth.RegisterRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,4 +47,20 @@ public class AuthController {
         UserDTO userDTO = authenticationService.showUserLeaves(userId);
         return ResponseEntity.ok(userDTO);
     }
+
+    @PutMapping("/changeUserName/{userId}")
+    public ResponseEntity<UserDTO> changeUserName(@Valid @PathVariable Long userId, @Valid @RequestBody UpdateUserNameReq request){
+        UserDTO userDTO = authenticationService.updateUserName(userId, request);
+        return ResponseEntity.ok(userDTO);
+    }
+    @PutMapping("/changePassword/{userId}")
+    public ResponseEntity<UserDTO> changePassword(@Valid @PathVariable Long userId, @Valid @RequestBody UpdatePasswordReq request){
+        UserDTO userDTO = authenticationService.updatePasswordField(userId, request);
+        return ResponseEntity.ok(userDTO);
+
+    }
+
+
+
+
 }

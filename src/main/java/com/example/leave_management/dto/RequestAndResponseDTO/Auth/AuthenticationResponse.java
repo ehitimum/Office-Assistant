@@ -1,4 +1,4 @@
-package com.example.leave_management.api.v1.request.LeaveType;
+package com.example.leave_management.dto.RequestAndResponseDTO.Auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewLeaveType {
-    private String leaveTypeName;
+public class AuthenticationResponse {
+    private String token;
 }
