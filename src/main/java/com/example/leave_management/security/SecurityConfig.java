@@ -40,15 +40,21 @@ public class SecurityConfig {
                         "/swagger-ui.html")
                 .permitAll()
                 .requestMatchers("/api/v1/auth/register",
-                       "/api/v1/auth/create-leave-type" ).hasAuthority("SUPERADMIN")
+                       "/api/v1/auth/create-leave-type" )
+                .hasAuthority("SUPERADMIN")
+
                 .requestMatchers("/api/v1/Leave/pending-approval",
-                        "/api/v1/Leave/pending-approval/**").hasAnyAuthority("ADMIN", "SUPERADMIN")
+                        "/api/v1/Leave/pending-approval/**",
+                        "/api/v1/auth/custom-leave-balance/**")
+                .hasAnyAuthority("ADMIN", "SUPERADMIN")
+
                 .requestMatchers("/api/v1/auth/changeUserName/**",
                         "api/v1/auth/changePassword/**",
                         "api/v1/auth/yearly-leave/**",
                         "api/v1/auth/paged",
                         "/api/v1/Leave/leave-application",
-                        "/api/v1/Leave/Application-List/**")
+                        "/api/v1/Leave/Application-List/**",
+                "api/v1/auth/get-leave-type")
                 .hasAnyAuthority("EMPLOYEE", "ADMIN", "SUPERADMIN")
                 .anyRequest()
                 .authenticated()

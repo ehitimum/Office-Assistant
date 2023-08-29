@@ -1,10 +1,13 @@
 package com.example.leave_management.service.LeaveType;
 
+import com.example.leave_management.dto.EntityDTO.LeaveTypeDTO;
 import com.example.leave_management.dto.RequestAndResponseDTO.LeaveType.LeaveTypeCreationResponse;
 import com.example.leave_management.dto.RequestAndResponseDTO.LeaveType.NewLeaveType;
 import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
 import com.example.leave_management.domain.repository.LeaveTypeRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LeaveTypeService {
@@ -29,5 +32,9 @@ public class LeaveTypeService {
                 .msg("Leave Type already exists")
                 .build();
 
+    }
+
+    public List<LeaveType> showAllLeaveTypeName() {
+        return leaveTypeRepository.findAll();
     }
 }

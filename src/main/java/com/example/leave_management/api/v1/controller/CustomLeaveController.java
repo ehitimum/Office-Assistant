@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CustomLeaveController {
     private final LeaveBalanceService service;
-    @PostMapping("/custom-leave-balance/{userId}")
+    @PutMapping("/custom-leave-balance/{userId}")
     public ResponseEntity<CustomLeaveBalanceSetResponse> setCustomLeaveBalance(@RequestBody CustomBalanceSetter request, @PathVariable Long userId){
-        return ResponseEntity.ok(service.setCustomBalanceForNewUser(userId));
+        return ResponseEntity.ok(service.setCustomBalance(request, userId));
     }
 }

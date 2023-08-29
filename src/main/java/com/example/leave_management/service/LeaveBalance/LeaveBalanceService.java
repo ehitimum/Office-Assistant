@@ -1,10 +1,12 @@
 package com.example.leave_management.service.LeaveBalance;
 
+import com.example.leave_management.dto.RequestAndResponseDTO.LeaveBalance.CustomBalanceSetter;
 import com.example.leave_management.dto.RequestAndResponseDTO.LeaveBalance.CustomLeaveBalanceSetResponse;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.LeaveBalanceRepository;
 import com.example.leave_management.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Service
 public class LeaveBalanceService {
+
     private final LeaveBalanceRepository leaveBalanceRepository;
     private final UserRepository userRepository;
 
@@ -34,6 +37,21 @@ public class LeaveBalanceService {
                 .build();
         leaveBalanceRepository.save(balance);
         return CustomLeaveBalanceSetResponse.builder().response("New User Leave Balance has set.").build();
+    }
+
+    @Transactional
+    public CustomLeaveBalanceSetResponse setCustomBalance(CustomBalanceSetter request, Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        var balance = LeaveBalance.builder()
+                .sickLeaveBalance(request.getSickLeaveBalance())
+                .earnedLeaveBalance(request.getEarnedLeaveBalance())
+                .negativeBalance(request.getNegativeBalance())
+                .user(user)
+                .build();
+        leaveBalanceRepository.save(balance);
+        return CustomLeaveBalanceSetResponse.builder().response("A new balance is updated.").build();
     }
 
     public void balanceDeduction(Long userId){
