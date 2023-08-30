@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/api/v1/auth/authenticate",
+                        "/api/v1/auth/register",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
                         "/swagger-resources",
@@ -39,7 +40,7 @@ public class SecurityConfig {
                         "/webjars/**",
                         "/swagger-ui.html")
                 .permitAll()
-                .requestMatchers("/api/v1/auth/register",
+                .requestMatchers(
                        "/api/v1/auth/create-leave-type" )
                 .hasAuthority("SUPERADMIN")
 
