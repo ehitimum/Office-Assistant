@@ -1,9 +1,8 @@
 package com.example.leave_management.api.v1.controller;
 
 import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
-import com.example.leave_management.dto.EntityDTO.LeaveTypeDTO;
-import com.example.leave_management.dto.RequestAndResponseDTO.LeaveType.LeaveTypeCreationResponse;
-import com.example.leave_management.dto.RequestAndResponseDTO.LeaveType.NewLeaveType;
+import com.example.leave_management.dto.LeaveType.LeaveTypeCreationResponse;
+import com.example.leave_management.dto.LeaveType.NewLeaveType;
 import com.example.leave_management.service.LeaveType.LeaveTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

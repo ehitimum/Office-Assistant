@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.EntityDTO;
+package com.example.leave_management.dto.Auth;
 
 import com.example.leave_management.domain.model.User.Role;
 import com.example.leave_management.domain.model.User.User;

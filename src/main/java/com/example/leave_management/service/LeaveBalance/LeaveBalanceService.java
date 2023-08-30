@@ -1,7 +1,7 @@
 package com.example.leave_management.service.LeaveBalance;
 
-import com.example.leave_management.dto.RequestAndResponseDTO.LeaveBalance.CustomBalanceSetter;
-import com.example.leave_management.dto.RequestAndResponseDTO.LeaveBalance.CustomLeaveBalanceSetResponse;
+import com.example.leave_management.dto.LeaveBalance.CustomBalanceSetter;
+import com.example.leave_management.dto.LeaveBalance.CustomLeaveBalanceSetResponse;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.LeaveBalanceRepository;

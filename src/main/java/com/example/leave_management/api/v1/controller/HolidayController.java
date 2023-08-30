@@ -1,8 +1,8 @@
 package com.example.leave_management.api.v1.controller;
 
 import com.example.leave_management.domain.model.Holidays.Holidays;
-import com.example.leave_management.dto.RequestAndResponseDTO.HolidayReqRes.NewHolidayRequest;
-import com.example.leave_management.dto.RequestAndResponseDTO.HolidayReqRes.NewHolidayResponse;
+import com.example.leave_management.dto.HolidayReqRes.NewHolidayRequest;
+import com.example.leave_management.dto.HolidayReqRes.NewHolidayResponse;
 import com.example.leave_management.service.Holiday.HolidayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

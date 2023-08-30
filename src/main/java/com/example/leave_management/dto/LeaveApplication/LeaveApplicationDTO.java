@@ -1,6 +1,7 @@
-package com.example.leave_management.dto.EntityDTO;
+package com.example.leave_management.dto.LeaveApplication;
 
 import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveStatus;
+import com.example.leave_management.dto.Auth.UserDTO;
 import lombok.*;
 
 import java.time.LocalDate;

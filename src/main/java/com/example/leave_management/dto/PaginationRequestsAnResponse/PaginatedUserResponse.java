@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.RequestAndResponseDTO.PaginationRequestsAnResponse;
+package com.example.leave_management.dto.PaginationRequestsAnResponse;
 
 import com.example.leave_management.domain.model.User.User;
 import lombok.AllArgsConstructor;

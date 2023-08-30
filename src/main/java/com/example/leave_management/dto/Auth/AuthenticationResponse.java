@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication;
+package com.example.leave_management.dto.Auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationSubmissonResponse {
-    private String response;
+public class AuthenticationResponse {
+    private String token;
 }

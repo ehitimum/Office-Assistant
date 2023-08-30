@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.RequestAndResponseDTO.LeaveType;
+package com.example.leave_management.dto.UpdateAccount;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeaveTypeCreationResponse {
+public class AccountUpdateResponse {
     private String msg;
 }

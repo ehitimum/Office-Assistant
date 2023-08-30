@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.RequestAndResponseDTO.HolidayReqRes;
+package com.example.leave_management.dto.HolidayReqRes;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

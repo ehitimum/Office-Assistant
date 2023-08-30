@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.RequestAndResponseDTO.PaginationRequestsAnResponse;
+package com.example.leave_management.dto.LeaveType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageNumberRequest {
-    private int currentPageNumber;
+public class LeaveTypeCreationResponse {
+    private String msg;
 }

@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.RequestAndResponseDTO.HolidayReqRes;
+package com.example.leave_management.dto.Auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewHolidayResponse {
-    private String msg;
+public class AuthenticationRequest {
+    private String email;
+    String password;
 }

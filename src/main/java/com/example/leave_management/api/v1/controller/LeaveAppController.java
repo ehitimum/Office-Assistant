@@ -1,9 +1,9 @@
 package com.example.leave_management.api.v1.controller;
 
-import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.ApplicationSubmissonResponse;
-import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.LeaveApplicationRequest;
-import com.example.leave_management.dto.RequestAndResponseDTO.LeaveApplication.updateApplicationReq;
-import com.example.leave_management.dto.EntityDTO.LeaveApplicationDTO;
+import com.example.leave_management.dto.LeaveApplication.ApplicationSubmissonResponse;
+import com.example.leave_management.dto.LeaveApplication.LeaveApplicationRequest;
+import com.example.leave_management.dto.LeaveApplication.updateApplicationReq;
+import com.example.leave_management.dto.LeaveApplication.LeaveApplicationDTO;
 import com.example.leave_management.service.LeaveApplication.LeaveApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

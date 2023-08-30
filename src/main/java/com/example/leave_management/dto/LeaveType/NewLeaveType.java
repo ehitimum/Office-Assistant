@@ -1,5 +1,6 @@
-package com.example.leave_management.dto.EntityDTO;
+package com.example.leave_management.dto.LeaveType;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,9 +8,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class LeaveTypeDTO {
-    private Long leaveTypeId;
+@NoArgsConstructor
+public class NewLeaveType {
+    @NotNull
     private String leaveTypeName;
 }

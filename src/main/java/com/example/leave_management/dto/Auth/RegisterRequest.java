@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.RequestAndResponseDTO.Auth;
+package com.example.leave_management.dto.Auth;
 
 import com.example.leave_management.domain.model.User.Role;
 import lombok.AllArgsConstructor;

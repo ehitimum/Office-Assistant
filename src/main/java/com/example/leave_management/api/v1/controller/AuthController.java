@@ -1,14 +1,14 @@
 package com.example.leave_management.api.v1.controller;
 
 
-import com.example.leave_management.dto.RequestAndResponseDTO.Auth.AuthenticationRequest;
-import com.example.leave_management.dto.RequestAndResponseDTO.Auth.AuthenticationResponse;
-import com.example.leave_management.dto.RequestAndResponseDTO.PaginationRequestsAnResponse.PageNumberRequest;
-import com.example.leave_management.dto.RequestAndResponseDTO.UpdateAccount.UpdatePasswordReq;
-import com.example.leave_management.dto.RequestAndResponseDTO.UpdateAccount.UpdateUserNameReq;
-import com.example.leave_management.dto.EntityDTO.UserDTO;
+import com.example.leave_management.dto.Auth.AuthenticationRequest;
+import com.example.leave_management.dto.Auth.AuthenticationResponse;
+import com.example.leave_management.dto.PaginationRequestsAnResponse.PageNumberRequest;
+import com.example.leave_management.dto.UpdateAccount.UpdatePasswordReq;
+import com.example.leave_management.dto.UpdateAccount.UpdateUserNameReq;
+import com.example.leave_management.dto.Auth.UserDTO;
 import com.example.leave_management.service.Auth.AuthenticationService;
-import com.example.leave_management.dto.RequestAndResponseDTO.Auth.RegisterRequest;
+import com.example.leave_management.dto.Auth.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

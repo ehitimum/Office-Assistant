@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.RequestAndResponseDTO.UpdateAccount;
+package com.example.leave_management.dto.UpdateAccount;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserNameReq {
+public class UpdatePasswordReq {
     @NotNull
-    private String userName;
+    private String oldPassword;
+    @NotNull
+    private String password;
 }
