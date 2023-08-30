@@ -55,7 +55,8 @@ public class SecurityConfig {
                         "api/v1/auth/paged",
                         "/api/v1/Leave/leave-application",
                         "/api/v1/Leave/Application-List/**",
-                "api/v1/auth/get-leave-type")
+                "api/v1/auth/get-leave-type",
+                        "api/v1/holidays/show-HolidayList")
                 .hasAnyAuthority("EMPLOYEE", "ADMIN", "SUPERADMIN")
                 .anyRequest()
                 .authenticated()

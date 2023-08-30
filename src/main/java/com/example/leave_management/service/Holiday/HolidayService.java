@@ -15,6 +15,10 @@ public class HolidayService {
         this.repository = repository;
     }
 
+    public List<Holidays> getAllHolidays() {
+        return repository.findAll();
+    }
+
     public NewHolidayResponse createNewHolidays(List<Holidays> requests) {
         repository.saveAll(requests);
         return NewHolidayResponse.builder().msg("Success!").build();

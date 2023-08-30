@@ -7,10 +7,7 @@ import com.example.leave_management.service.Holiday.HolidayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,10 @@ public class HolidayController {
     @PostMapping("/create-a-holiday")
     public ResponseEntity<NewHolidayResponse> addAHoliday(@RequestBody NewHolidayRequest request){
         return ResponseEntity.ok(holidayService.createOneHoliday(request));
+    }
+    @GetMapping("/show-HolidayList")
+    public List<Holidays> getAllHolidays() {
+        return holidayService.getAllHolidays();
     }
 
 }

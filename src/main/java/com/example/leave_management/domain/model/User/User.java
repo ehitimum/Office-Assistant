@@ -1,6 +1,7 @@
 package com.example.leave_management.domain.model.User;
 
 
+import com.example.leave_management.domain.model.Holidays.Holidays;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -35,7 +36,9 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user")
     @JsonIgnore
     private LeaveBalance leaveBalance;
-
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Holidays> holidays;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
