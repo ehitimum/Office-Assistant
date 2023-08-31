@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user")
     @JsonIgnore
     private LeaveBalance leaveBalance;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private List<Holidays> holidays;
     @Override

@@ -46,7 +46,10 @@ public class SecurityConfig {
 
                 .requestMatchers("/api/v1/Leave/pending-approval",
                         "/api/v1/Leave/pending-approval/**",
-                        "/api/v1/auth/custom-leave-balance/**")
+                        "/api/v1/auth/custom-leave-balance/**",
+                        "pi/v1/holidays/create-holidays",
+                        "api/v1/holidays/link-holidays/users/**",
+                        "api/v1/holidays/update-holiday-info/**")
                 .hasAnyAuthority("ADMIN", "SUPERADMIN")
 
                 .requestMatchers("/api/v1/auth/changeUserName/**",
@@ -55,7 +58,7 @@ public class SecurityConfig {
                         "api/v1/auth/paged",
                         "/api/v1/Leave/leave-application",
                         "/api/v1/Leave/Application-List/**",
-                "api/v1/auth/get-leave-type",
+                        "api/v1/auth/get-leave-type",
                         "api/v1/holidays/show-HolidayList")
                 .hasAnyAuthority("EMPLOYEE", "ADMIN", "SUPERADMIN")
                 .anyRequest()
