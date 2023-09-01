@@ -22,6 +22,7 @@ public class LeaveApplicationDTO {
     private Long userId;
     private Long days;
     private UserDTO user;
+    private boolean Deleted;
 
 
 }

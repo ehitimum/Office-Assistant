@@ -1,5 +1,8 @@
 package com.example.leave_management.service.Auth;
 
+import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveApplication;
+import com.example.leave_management.domain.repository.LeaveApplicationRepository;
+import com.example.leave_management.domain.repository.LeaveBalanceRepository;
 import com.example.leave_management.dto.PaginationRequestsAnResponse.PageNumberRequest;
 import com.example.leave_management.dto.UpdateAccount.UpdatePasswordReq;
 import com.example.leave_management.dto.UpdateAccount.UpdateUserNameReq;
@@ -34,13 +37,20 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final LeaveBalanceService leaveBalanceService;
+    private final LeaveBalanceRepository leaveBalanceRepository;
+    private final LeaveApplicationRepository leaveApplicationRepository;
+
     @Autowired
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, LeaveBalanceService leaveBalanceService) {
+    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, LeaveBalanceService leaveBalanceService,
+                                 LeaveBalanceRepository leaveBalanceRepository,
+                                 LeaveApplicationRepository leaveApplicationRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.leaveBalanceService = leaveBalanceService;
+        this.leaveBalanceRepository = leaveBalanceRepository;
+        this.leaveApplicationRepository = leaveApplicationRepository;
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -55,6 +65,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .Deleted(false)
                 .build();
         userRepository.save(user);
         leaveBalanceService.setCustomBalanceForNewUser(user.getUserId());
@@ -69,7 +80,10 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.isDeleted()) {
+            throw new RuntimeException("User is flagged as deleted.");
+        }
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -78,19 +92,17 @@ public class AuthenticationService {
 
     public List<UserDTO> getUserListWithPagination(PageNumberRequest paginationRequest) {
         int pageNumber = paginationRequest.getCurrentPageNumber();
-        int pageSize = 5; // Number of users per page
+        int pageSize = 5;
 
-        Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize); // Adjusting page number to 0-based index
+        Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize);
 
         Page<User> userPage = userRepository.findAll(pageRequest);
 
         String message = "Successfully retrieved user list with pagination.";
 
-        List<UserDTO> userDTOs = userPage.getContent().stream()
+        return userPage.getContent().stream()
                 .map(this::convertToUserDTO)
                 .collect(Collectors.toList());
-
-        return userDTOs;
     }
 
     private UserDTO convertToUserDTO(User user) {
@@ -112,7 +124,8 @@ public class AuthenticationService {
                 user.getRole(),
                 leaveBalance != null ? leaveBalance.getSickLeaveBalance() : 0,
                 leaveBalance != null ? leaveBalance.getEarnedLeaveBalance() : 0,
-                leaveBalance != null ? leaveBalance.getNegativeBalance() : 0
+                leaveBalance != null ? leaveBalance.getNegativeBalance() : 0,
+                user.isDeleted()
         );
     }
 
@@ -131,5 +144,22 @@ public class AuthenticationService {
             userRepository.save(user);
         }
         return getUserDTO(user);
+    }
+
+    @Transactional
+    public void deleteUserInformation(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        List<LeaveApplication> leaveApplications = leaveApplicationRepository.findByUser(user);
+        for (LeaveApplication leaveApplication : leaveApplications) {
+            leaveApplication.setDeleted(true);
+            leaveApplicationRepository.save(leaveApplication);
+        }
+        LeaveBalance balance = user.getLeaveBalance();
+        if (balance != null) {
+            balance.setDeleted(true);
+            leaveBalanceRepository.save(balance);
+        }
+         user.setDeleted(true);
+         userRepository.save(user);
     }
 }

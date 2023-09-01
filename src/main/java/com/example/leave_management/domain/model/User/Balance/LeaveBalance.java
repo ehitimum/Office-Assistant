@@ -31,6 +31,9 @@ public class LeaveBalance {
     private int sickLeaveBalance;
     private int earnedLeaveBalance;
     private int negativeBalance;
+    @Column(columnDefinition = "boolean default false")
+    private boolean Deleted;
+
 
 
 }

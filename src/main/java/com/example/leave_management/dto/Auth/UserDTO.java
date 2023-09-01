@@ -18,6 +18,8 @@ public class UserDTO {
         private int sickLeaveBalance;
         private int earnedLeaveBalance;
         private int negativeBalance;
+        private boolean Deleted;
+
 
         public UserDTO(User user) {
                 this.userId = getUserId();
@@ -27,6 +29,9 @@ public class UserDTO {
                 this.sickLeaveBalance = getSickLeaveBalance();
                 this.earnedLeaveBalance = getEarnedLeaveBalance();
                 this.negativeBalance = getNegativeBalance();
+                this.Deleted = isDeleted();
+
         }
+
 
 }

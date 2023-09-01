@@ -41,13 +41,14 @@ public class SecurityConfig {
                         "/swagger-ui.html")
                 .permitAll()
                 .requestMatchers(
-                       "/api/v1/auth/create-leave-type" )
+                       "/api/v1/auth/create-leave-type",
+                        "/api/v1/auth/delete-user/**")
                 .hasAuthority("SUPERADMIN")
 
                 .requestMatchers("/api/v1/Leave/pending-approval",
                         "/api/v1/Leave/pending-approval/**",
                         "/api/v1/auth/custom-leave-balance/**",
-                        "pi/v1/holidays/create-holidays",
+                        "api/v1/holidays/create-holidays",
                         "api/v1/holidays/link-holidays/users/**",
                         "api/v1/holidays/update-holiday-info/**")
                 .hasAnyAuthority("ADMIN", "SUPERADMIN")
@@ -55,7 +56,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/changeUserName/**",
                         "api/v1/auth/changePassword/**",
                         "api/v1/auth/yearly-leave/**",
-                        "api/v1/auth/paged",
+                        "api/v1/auth/user-list",
                         "/api/v1/Leave/leave-application",
                         "/api/v1/Leave/Application-List/**",
                         "api/v1/auth/get-leave-type",

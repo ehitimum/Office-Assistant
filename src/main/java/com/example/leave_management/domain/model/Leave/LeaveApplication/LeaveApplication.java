@@ -41,5 +41,7 @@ public class LeaveApplication {
             referencedColumnName = "userId"
     )
     private User user;
+    @Column(columnDefinition = "boolean default false")
+    private boolean Deleted;
 
 }

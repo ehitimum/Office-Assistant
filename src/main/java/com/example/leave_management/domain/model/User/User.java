@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(columnDefinition = "boolean default false")
+    private boolean Deleted;
 
     @OneToOne(mappedBy = "user")
     @JsonIgnore
@@ -39,6 +41,8 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private List<Holidays> holidays;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -77,4 +81,5 @@ public class User implements UserDetails {
     public String getUserName() {
         return userName;
     }
+
 }

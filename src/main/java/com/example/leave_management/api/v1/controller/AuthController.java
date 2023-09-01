@@ -12,6 +12,7 @@ import com.example.leave_management.dto.Auth.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+
 public class AuthController {
     private final AuthenticationService authenticationService;
 
@@ -34,10 +36,12 @@ public class AuthController {
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
-    @GetMapping("/paged")
+    @GetMapping("/user-list")
     public ResponseEntity<List<UserDTO>> getUserListWithPagination(
-            @RequestBody PageNumberRequest paginationRequest) {
-        List<UserDTO> userDTOs = authenticationService.getUserListWithPagination(paginationRequest);
+            @RequestParam(name = "currentPageNumber") int currentPageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize) {
+        PageNumberRequest pageNumberRequest = new PageNumberRequest(currentPageNumber);
+        List<UserDTO> userDTOs = authenticationService.getUserListWithPagination(pageNumberRequest);
 
         return ResponseEntity.ok(userDTOs);
     }
@@ -58,6 +62,11 @@ public class AuthController {
         UserDTO userDTO = authenticationService.updatePasswordField(userId, request);
         return ResponseEntity.ok(userDTO);
 
+    }
+    @DeleteMapping("/delete-user/{userId}")
+    public ResponseEntity<String> deleteUserInformation(@Valid @PathVariable Long userId){
+        authenticationService.deleteUserInformation(userId);
+        return ResponseEntity.ok("Success!");
     }
 
 
