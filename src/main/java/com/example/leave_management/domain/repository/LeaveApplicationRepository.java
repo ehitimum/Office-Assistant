@@ -13,7 +13,7 @@ public interface LeaveApplicationRepository extends JpaRepository<LeaveApplicati
     @Query("SELECT la FROM LeaveApplication la WHERE la.user.userId = :userId")
     Page<LeaveApplication> findApplicationsByUserId(Long userId, Pageable pageRequest);
 
-    @Query("SELECT la FROM LeaveApplication la WHERE la.leaveStatus = 'PENDING' AND la.user.Deleted = false ")
+    @Query("SELECT la FROM LeaveApplication la WHERE la.leaveStatus = 'PENDING' AND la.user.Deleted = false")
     Page<LeaveApplication> findPendingApplicationsByUserId(Pageable pageRequest);
 
     List<LeaveApplication> findByUser(User user);
