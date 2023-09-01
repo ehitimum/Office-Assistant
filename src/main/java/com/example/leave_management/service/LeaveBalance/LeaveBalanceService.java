@@ -81,7 +81,7 @@ public class LeaveBalanceService {
             int currentMonth = LocalDate.now().getMonthValue();
             if (currentMonth <= 10) {
                 userBalance.setEarnedLeaveBalance(userBalance.getEarnedLeaveBalance() + 1);
-            } else if (currentMonth == 11) {
+            } else if (currentMonth == 12) {
                 userBalance.setSickLeaveBalance(5);
                 userBalance.setEarnedLeaveBalance(0);
             }
