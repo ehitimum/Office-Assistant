@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.UpdateAccount;
+package com.example.leave_management.dto.LeaveType;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserNameReq {
+public class NewLeaveTypeDTO {
     @NotNull
-    private String userName;
+    private String leaveTypeName;
 }

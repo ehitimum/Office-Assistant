@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.LeaveType;
+package com.example.leave_management.dto.Bills;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class LeaveTypeCreationResponse {
-    private String msg;
+@AllArgsConstructor
+public class UtilityResponseDTO {
+    private String response;
 }

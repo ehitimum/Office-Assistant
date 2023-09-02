@@ -1,7 +1,7 @@
 package com.example.leave_management.service.LeaveBalance;
 
-import com.example.leave_management.dto.LeaveBalance.CustomBalanceSetter;
-import com.example.leave_management.dto.LeaveBalance.CustomLeaveBalanceSetResponse;
+import com.example.leave_management.dto.LeaveBalance.CustomBalanceSetterDTO;
+import com.example.leave_management.dto.LeaveBalance.CustomLeaveBalanceSetResponseDTO;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.LeaveBalanceRepository;
@@ -25,7 +25,7 @@ public class LeaveBalanceService {
         this.userRepository = userRepository;
     }
 
-    public CustomLeaveBalanceSetResponse setCustomBalanceForNewUser(Long userId){
+    public CustomLeaveBalanceSetResponseDTO setCustomBalanceForNewUser(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -36,11 +36,11 @@ public class LeaveBalanceService {
                 .user(user)
                 .build();
         leaveBalanceRepository.save(balance);
-        return CustomLeaveBalanceSetResponse.builder().response("New User Leave Balance has set.").build();
+        return CustomLeaveBalanceSetResponseDTO.builder().response("New User Leave Balance has set.").build();
     }
 
     @Transactional
-    public CustomLeaveBalanceSetResponse setCustomBalance(CustomBalanceSetter request, Long userId){
+    public CustomLeaveBalanceSetResponseDTO setCustomBalance(CustomBalanceSetterDTO request, Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -51,7 +51,7 @@ public class LeaveBalanceService {
                 .user(user)
                 .build();
         leaveBalanceRepository.save(balance);
-        return CustomLeaveBalanceSetResponse.builder().response("A new balance is updated.").build();
+        return CustomLeaveBalanceSetResponseDTO.builder().response("A new balance is updated.").build();
     }
 
     public void balanceDeduction(Long userId){

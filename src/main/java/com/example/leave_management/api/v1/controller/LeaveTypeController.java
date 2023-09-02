@@ -1,8 +1,8 @@
 package com.example.leave_management.api.v1.controller;
 
 import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
-import com.example.leave_management.dto.LeaveType.LeaveTypeCreationResponse;
-import com.example.leave_management.dto.LeaveType.NewLeaveType;
+import com.example.leave_management.dto.LeaveType.LeaveTypeCreationResponseDTO;
+import com.example.leave_management.dto.LeaveType.NewLeaveTypeDTO;
 import com.example.leave_management.service.LeaveType.LeaveTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 public class LeaveTypeController {
     private final LeaveTypeService service;
     @PostMapping("/create-leave-type")
-    public ResponseEntity<LeaveTypeCreationResponse> addLeaveType(@Valid @RequestBody NewLeaveType request){
+    public ResponseEntity<LeaveTypeCreationResponseDTO> addLeaveType(@Valid @RequestBody NewLeaveTypeDTO request){
         return ResponseEntity.ok(service.createNewLeaveType(request));
     }
     @GetMapping("/get-leave-type")

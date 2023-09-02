@@ -4,8 +4,8 @@ import com.example.leave_management.domain.model.Holidays.Holidays;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.HolidaysRepository;
 import com.example.leave_management.domain.repository.UserRepository;
-import com.example.leave_management.dto.HolidayReqRes.NewHolidayRequest;
-import com.example.leave_management.dto.HolidayReqRes.NewHolidayResponse;
+import com.example.leave_management.dto.HolidayReqRes.NewHolidayRequestDTO;
+import com.example.leave_management.dto.HolidayReqRes.NewHolidayResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,39 +25,39 @@ public class HolidayService {
         return repository.findAll();
     }
 
-    public NewHolidayResponse createNewHolidays(List<Holidays> requests) {
+    public NewHolidayResponseDTO createNewHolidays(List<Holidays> requests) {
         repository.saveAll(requests);
-        return NewHolidayResponse.builder().msg("Success!").build();
+        return NewHolidayResponseDTO.builder().msg("Success!").build();
     }
 
-    public NewHolidayResponse createOneHoliday(NewHolidayRequest request) {
+    public NewHolidayResponseDTO createOneHoliday(NewHolidayRequestDTO request) {
         var holiday = Holidays.builder()
                 .holidayName(request.getHolidayName())
                 .holidayStartDate(request.getHolidayStartDate())
                 .totalHoliday(request.getTotalHoliday())
                 .build();
         repository.save(holiday);
-        return NewHolidayResponse.builder().msg("Success!").build();
+        return NewHolidayResponseDTO.builder().msg("Success!").build();
     }
 
-    public NewHolidayResponse updateHoliday(Long holidayId, Holidays updatedHoliday) {
+    public NewHolidayResponseDTO updateHoliday(Long holidayId, Holidays updatedHoliday) {
         Optional<Holidays> holidayToUpdate = repository.findById(holidayId);
         if (holidayToUpdate.isPresent()) {
             Holidays existingHoliday = holidayToUpdate.get();
             repository.save(existingHoliday);
         }
-        return NewHolidayResponse.builder().msg("Success!").build();
+        return NewHolidayResponseDTO.builder().msg("Success!").build();
     }
 
 
 
-    public NewHolidayResponse linkHolidaysToUser(Long userId, List<Holidays> holidays) {
+    public NewHolidayResponseDTO linkHolidaysToUser(Long userId, List<Holidays> holidays) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.setHolidays(holidays);
             userRepository.save(user);
         }
-        return NewHolidayResponse.builder().msg("Success!").build();
+        return NewHolidayResponseDTO.builder().msg("Success!").build();
     }
 }

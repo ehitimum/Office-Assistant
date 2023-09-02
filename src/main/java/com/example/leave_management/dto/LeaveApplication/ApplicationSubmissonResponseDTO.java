@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.HolidayReqRes;
+package com.example.leave_management.dto.LeaveApplication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewHolidayResponse {
-    private String msg;
+public class ApplicationSubmissonResponseDTO {
+    private String response;
 }

@@ -16,9 +16,13 @@ public class Bills {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long billId;
+    private String billingTitle;
     private String comment;
+    private Integer billCost;
     @Enumerated(EnumType.STRING)
     private BillStatus billStatus;
+    @Column(columnDefinition = "boolean default false")
+    private boolean Deleted;
     @OneToOne(
             cascade = CascadeType.ALL
     )

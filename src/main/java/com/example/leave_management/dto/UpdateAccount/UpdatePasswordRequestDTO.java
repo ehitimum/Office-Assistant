@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdatePasswordReq {
+public class UpdatePasswordRequestDTO {
     @NotNull
     private String oldPassword;
     @NotNull

@@ -1,9 +1,8 @@
 package com.example.leave_management.api.v1.controller;
 
 import com.example.leave_management.domain.model.Holidays.Holidays;
-import com.example.leave_management.dto.HolidayReqRes.NewHolidayRequest;
-import com.example.leave_management.dto.HolidayReqRes.NewHolidayResponse;
-import com.example.leave_management.service.Auth.AuthenticationService;
+import com.example.leave_management.dto.HolidayReqRes.NewHolidayRequestDTO;
+import com.example.leave_management.dto.HolidayReqRes.NewHolidayResponseDTO;
 import com.example.leave_management.service.Holiday.HolidayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +19,11 @@ public class HolidayController {
 
     private final HolidayService holidayService;
     @PostMapping("/create-holidays")
-    public ResponseEntity<NewHolidayResponse> addNewHolidays(@RequestBody List<Holidays> holidays){
+    public ResponseEntity<NewHolidayResponseDTO> addNewHolidays(@RequestBody List<Holidays> holidays){
         return ResponseEntity.ok(holidayService.createNewHolidays(holidays));
     }
     @PostMapping("/create-a-holiday")
-    public ResponseEntity<NewHolidayResponse> addAHoliday(@RequestBody NewHolidayRequest request){
+    public ResponseEntity<NewHolidayResponseDTO> addAHoliday(@RequestBody NewHolidayRequestDTO request){
         return ResponseEntity.ok(holidayService.createOneHoliday(request));
     }
     @GetMapping("/show-HolidayList")
@@ -33,12 +32,12 @@ public class HolidayController {
     }
 
     @PutMapping("/update-holiday-info/{holidayId}")
-    public ResponseEntity<NewHolidayResponse> updateHoliday(@PathVariable Long holidayId, @RequestBody Holidays updatedHoliday) {
+    public ResponseEntity<NewHolidayResponseDTO> updateHoliday(@PathVariable Long holidayId, @RequestBody Holidays updatedHoliday) {
         return ResponseEntity.ok(holidayService.updateHoliday(holidayId, updatedHoliday));
     }
 
     @PostMapping("/link-holidays/users/{userId}")
-    public ResponseEntity<NewHolidayResponse> linkHolidaysToUser(@PathVariable Long userId, @RequestBody List<Holidays> holidays) {
+    public ResponseEntity<NewHolidayResponseDTO> linkHolidaysToUser(@PathVariable Long userId, @RequestBody List<Holidays> holidays) {
         return ResponseEntity.ok(holidayService.linkHolidaysToUser(userId, holidays));
     }
 

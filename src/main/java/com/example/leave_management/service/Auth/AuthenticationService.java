@@ -3,15 +3,15 @@ package com.example.leave_management.service.Auth;
 import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveApplication;
 import com.example.leave_management.domain.repository.LeaveApplicationRepository;
 import com.example.leave_management.domain.repository.LeaveBalanceRepository;
-import com.example.leave_management.dto.PaginationRequestsAnResponse.PageNumberRequest;
-import com.example.leave_management.dto.UpdateAccount.UpdatePasswordReq;
-import com.example.leave_management.dto.UpdateAccount.UpdateUserNameReq;
+import com.example.leave_management.dto.PaginationRequestsAnResponse.PageNumberRequestDTO;
+import com.example.leave_management.dto.UpdateAccount.UpdatePasswordRequestDTO;
+import com.example.leave_management.dto.UpdateAccount.UpdateUserNameRequestDTO;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.UserRepository;
-import com.example.leave_management.dto.Auth.AuthenticationRequest;
-import com.example.leave_management.dto.Auth.AuthenticationResponse;
-import com.example.leave_management.dto.Auth.RegisterRequest;
+import com.example.leave_management.dto.Auth.AuthenticationRequestDTO;
+import com.example.leave_management.dto.Auth.AuthenticationResponseDTO;
+import com.example.leave_management.dto.Auth.RegisterRequestDTO;
 import com.example.leave_management.dto.Auth.UserDTO;
 import com.example.leave_management.security.JwtService;
 import com.example.leave_management.service.LeaveBalance.LeaveBalanceService;
@@ -53,10 +53,10 @@ public class AuthenticationService {
         this.leaveApplicationRepository = leaveApplicationRepository;
     }
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponseDTO register(RegisterRequestDTO request) {
         Optional<User> userExistsOptional = userRepository.findByEmail(request.getEmail());
         if (userExistsOptional.isPresent()) {
-            return AuthenticationResponse.builder()
+            return AuthenticationResponseDTO.builder()
                     .token("The User Email Already Taken.")
                     .build();
         }
@@ -70,10 +70,10 @@ public class AuthenticationService {
         userRepository.save(user);
         leaveBalanceService.setCustomBalanceForNewUser(user.getUserId());
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponseDTO.builder().token(jwtToken).build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -85,12 +85,12 @@ public class AuthenticationService {
             throw new RuntimeException("User is flagged as deleted.");
         }
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return AuthenticationResponseDTO.builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public List<UserDTO> getUserListWithPagination(PageNumberRequest paginationRequest) {
+    public List<UserDTO> getUserListWithPagination(PageNumberRequestDTO paginationRequest) {
         int pageNumber = paginationRequest.getCurrentPageNumber();
         int pageSize = 5;
 
@@ -130,14 +130,14 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public UserDTO updateUserName(Long userId, UpdateUserNameReq request) {
+    public UserDTO updateUserName(Long userId, UpdateUserNameRequestDTO request) {
         User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
         user.setUserName(request.getUserName());
         userRepository.save(user);
         return getUserDTO(user);
     }
     @Transactional
-    public UserDTO updatePasswordField(Long userId, UpdatePasswordReq request) {
+    public UserDTO updatePasswordField(Long userId, UpdatePasswordRequestDTO request) {
         User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
         if(passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(request.getPassword()));

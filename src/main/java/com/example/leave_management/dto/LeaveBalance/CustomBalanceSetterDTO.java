@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomLeaveBalanceSetResponse {
-    private String response;
+public class CustomBalanceSetterDTO {
+    private int sickLeaveBalance;
+    private int earnedLeaveBalance;
+    private int negativeBalance;
 }

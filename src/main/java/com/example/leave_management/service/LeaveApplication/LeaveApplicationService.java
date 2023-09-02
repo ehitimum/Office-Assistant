@@ -1,8 +1,8 @@
 package com.example.leave_management.service.LeaveApplication;
 
-import com.example.leave_management.dto.LeaveApplication.ApplicationSubmissonResponse;
-import com.example.leave_management.dto.LeaveApplication.LeaveApplicationRequest;
-import com.example.leave_management.dto.LeaveApplication.updateApplicationReq;
+import com.example.leave_management.dto.LeaveApplication.ApplicationSubmissonResponseDTO;
+import com.example.leave_management.dto.LeaveApplication.LeaveApplicationRequestDTO;
+import com.example.leave_management.dto.LeaveApplication.UpdateApplicationReqDTO;
 import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveApplication;
 import com.example.leave_management.domain.model.Leave.LeaveType.LeaveType;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
@@ -38,7 +38,7 @@ public class LeaveApplicationService {
         this.leaveTypeRepository = leaveTypeRepository;
     }
 
-    public ApplicationSubmissonResponse saveApplicationRequest(LeaveApplicationRequest request){
+    public ApplicationSubmissonResponseDTO saveApplicationRequest(LeaveApplicationRequestDTO request){
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -55,13 +55,13 @@ public class LeaveApplicationService {
                 .build();
         repository.save(application);
 
-        return ApplicationSubmissonResponse.builder()
+        return ApplicationSubmissonResponseDTO.builder()
                 .response("The Applications have been Submitted")
                 .build();
     }
 
     @Transactional
-    public ApplicationSubmissonResponse updateApplicationRequest(updateApplicationReq request) {
+    public ApplicationSubmissonResponseDTO updateApplicationRequest(UpdateApplicationReqDTO request) {
         LeaveApplication application = repository.findById(request.getLeaveApplicationId())
                 .orElseThrow(()->new RuntimeException("Application Id not matched."));
         application.setLeaveStatus(request.getStatus());
@@ -71,7 +71,7 @@ public class LeaveApplicationService {
         repository.save(application);
         balanceService.balanceDeduction(userId);
 
-        return ApplicationSubmissonResponse.builder().response("The Application is"+request.getStatus()).build();
+        return ApplicationSubmissonResponseDTO.builder().response("The Application is " + request.getStatus()).build();
     }
 
     public List<LeaveApplicationDTO> getALlPendingApplications(int pageNumber) {

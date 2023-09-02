@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaginatedUserResponse {
+public class PaginatedUserResponseDTO {
     private Page<User> userPage;
     private String message;
 }

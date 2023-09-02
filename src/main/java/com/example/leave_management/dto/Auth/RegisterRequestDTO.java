@@ -1,5 +1,6 @@
 package com.example.leave_management.dto.Auth;
 
+import com.example.leave_management.domain.model.User.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-    private String token;
+public class RegisterRequestDTO {
+    private String userName;
+    private String email;
+    private String password;
+    private Role role;
 }

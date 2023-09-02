@@ -1,4 +1,4 @@
-package com.example.leave_management.dto.Auth;
+package com.example.leave_management.dto.PaginationRequestsAnResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
-    private String email;
-    String password;
+public class PageNumberRequestDTO {
+    private int currentPageNumber;
 }
