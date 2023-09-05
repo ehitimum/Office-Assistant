@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Bills {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long billId;
     private String billingTitle;
     private String comment;
