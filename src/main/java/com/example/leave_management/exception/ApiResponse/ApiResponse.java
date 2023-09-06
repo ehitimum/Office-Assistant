@@ -1,4 +1,4 @@
-package com.example.leave_management.exception.ErrorResponse;
+package com.example.leave_management.exception.ApiResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorResponse {
+public class ApiResponse<T> {
+    private boolean success;
     private String message;
+    private int statusCode;
+    private T data;
     private List<String> errors;
 }

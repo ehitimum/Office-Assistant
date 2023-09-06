@@ -29,7 +29,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/api/v1/auth/authenticate",
-                        "/api/v1/auth/register",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
                         "/swagger-resources",
@@ -41,6 +40,7 @@ public class SecurityConfig {
                         "/swagger-ui.html")
                 .permitAll()
                 .requestMatchers(
+                        "/api/v1/auth/register",
                        "/api/v1/auth/create-leave-type",
                         "/api/v1/auth/delete-user/**")
                 .hasAuthority("SUPERADMIN")
@@ -49,18 +49,26 @@ public class SecurityConfig {
                         "/api/v1/Leave/pending-approval/**",
                         "/api/v1/auth/custom-leave-balance/**",
                         "api/v1/holidays/create-holidays",
-                        "api/v1/holidays/link-holidays/users/**",
-                        "api/v1/holidays/update-holiday-info/**")
+                        "api/v1/holidays/link",
+                        "api/v1/holidays/update-holiday-info/**",
+                        "/api/v1/utility/pending-bill-request",
+                        "/api/v1/utility/pending-bill-request/**",
+                        "/api/v1/resource/share-resources",
+                        "/api/v1/resource/update-resource-information/**")
                 .hasAnyAuthority("ADMIN", "SUPERADMIN")
 
                 .requestMatchers("/api/v1/auth/changeUserName/**",
                         "api/v1/auth/changePassword/**",
                         "api/v1/auth/yearly-leave/**",
                         "api/v1/auth/user-list",
-                        "/api/v1/Leave/leave-application",
+                        "/api/v1/Leave/leave-application/user/**",
                         "/api/v1/Leave/Application-List/**",
                         "api/v1/auth/get-leave-type",
-                        "api/v1/holidays/show-HolidayList")
+                        "api/v1/holidays/show-HolidayList",
+                        "api/v1/holidays/show-HolidayList/**",
+                        "/api/v1/utility/apply-for-utility-bills/**",
+                        "/api/v1/resource/show-all-resources/**"
+                )
                 .hasAnyAuthority("EMPLOYEE", "ADMIN", "SUPERADMIN")
                 .anyRequest()
                 .authenticated()

@@ -19,19 +19,15 @@ public class ResourceController {
     private final ResourceService resourceService;
 
     @PostMapping("/share-resources")
-    public ResponseEntity<ResourceResponseDTO> shareNewResources(@RequestBody ResourceRequestDTO request){
+    public ResponseEntity<?> shareNewResources(@RequestBody ResourceRequestDTO request){
         return ResponseEntity.ok(resourceService.shareNewResource(request));
     }
     @GetMapping("/show-all-resources/{pageId}")
-    public ResponseEntity<List<Resources>> getAllResources(
-            @PathVariable int pageId) {
-        List<Resources> resources = resourceService.showAllSharedResources(pageId);
-        return ResponseEntity.ok(resources);
+    public ResponseEntity<?> getAllResources(@PathVariable int pageId) {
+        return ResponseEntity.ok(resourceService.showAllSharedResources(pageId));
     }
     @PutMapping("/update-resource-information/{resourceId}")
-    public ResponseEntity<ResourceResponseDTO> allowRejectBillRequests(
-            @PathVariable Long resourceId,
-            @RequestBody ResourceRequestDTO request){
+    public ResponseEntity<?> allowRejectBillRequests(@PathVariable Long resourceId, @RequestBody ResourceRequestDTO request){
         return ResponseEntity.ok(resourceService.updateResource(resourceId, request));
     }
 

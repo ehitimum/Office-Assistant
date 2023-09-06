@@ -23,7 +23,7 @@ public class Bills {
     private BillStatus billStatus;
     @Column(columnDefinition = "boolean default false")
     private boolean Deleted;
-    @OneToOne(
+    @ManyToOne(
             cascade = CascadeType.ALL
     )
     @JoinColumn(

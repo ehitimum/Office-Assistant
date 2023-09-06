@@ -38,8 +38,12 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user")
     @JsonIgnore
     private LeaveBalance leaveBalance;
-    @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id")
+    @ManyToMany
+    @JoinTable(
+            name = "user_holidays",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "holiday_id")
+    )
     private List<Holidays> holidays;
 
 

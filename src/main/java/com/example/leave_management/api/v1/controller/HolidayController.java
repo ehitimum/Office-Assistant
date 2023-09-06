@@ -2,7 +2,7 @@ package com.example.leave_management.api.v1.controller;
 
 import com.example.leave_management.domain.model.Holidays.Holidays;
 import com.example.leave_management.dto.HolidayReqRes.NewHolidayRequestDTO;
-import com.example.leave_management.dto.HolidayReqRes.NewHolidayResponseDTO;
+import com.example.leave_management.exception.ApiResponse.ApiResponse;
 import com.example.leave_management.service.Holiday.HolidayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,26 +19,30 @@ public class HolidayController {
 
     private final HolidayService holidayService;
     @PostMapping("/create-holidays")
-    public ResponseEntity<NewHolidayResponseDTO> addNewHolidays(@RequestBody List<Holidays> holidays){
+    public ResponseEntity<?> addNewHolidays(@RequestBody List<Holidays> holidays){
         return ResponseEntity.ok(holidayService.createNewHolidays(holidays));
     }
     @PostMapping("/create-a-holiday")
-    public ResponseEntity<NewHolidayResponseDTO> addAHoliday(@RequestBody NewHolidayRequestDTO request){
+    public ResponseEntity<?> addAHoliday(@RequestBody NewHolidayRequestDTO request){
         return ResponseEntity.ok(holidayService.createOneHoliday(request));
     }
     @GetMapping("/show-HolidayList")
-    public List<Holidays> getAllHolidays() {
+    public ApiResponse<List<Holidays>> getAllHolidays() {
         return holidayService.getAllHolidays();
+    }
+    @GetMapping("/show-user-holidayList/{userId}")
+    public ResponseEntity<?> getUserHolidayIds(@PathVariable Long userId) {
+        return ResponseEntity.ok(holidayService.getHolidayIdsByUserId(userId));
     }
 
     @PutMapping("/update-holiday-info/{holidayId}")
-    public ResponseEntity<NewHolidayResponseDTO> updateHoliday(@PathVariable Long holidayId, @RequestBody Holidays updatedHoliday) {
-        return ResponseEntity.ok(holidayService.updateHoliday(holidayId, updatedHoliday));
+    public ResponseEntity<?> updateHoliday(@PathVariable Long holidayId, @RequestBody NewHolidayRequestDTO requestDTO) {
+        return ResponseEntity.ok(holidayService.updateHoliday(holidayId, requestDTO));
     }
 
-    @PostMapping("/link-holidays/users/{userId}")
-    public ResponseEntity<NewHolidayResponseDTO> linkHolidaysToUser(@PathVariable Long userId, @RequestBody List<Holidays> holidays) {
-        return ResponseEntity.ok(holidayService.linkHolidaysToUser(userId, holidays));
+    @PostMapping("/link")
+    public ResponseEntity<?> linkHolidaysToUser(@RequestParam("userId") Long userId, @RequestBody List<Long> holidayIds) {
+        return ResponseEntity.ok(holidayService.linkHolidaysToUser(userId, holidayIds));
     }
 
 }

@@ -10,9 +10,9 @@ import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.UserRepository;
 import com.example.leave_management.dto.Auth.AuthenticationRequestDTO;
-import com.example.leave_management.dto.Auth.AuthenticationResponseDTO;
 import com.example.leave_management.dto.Auth.RegisterRequestDTO;
 import com.example.leave_management.dto.Auth.UserDTO;
+import com.example.leave_management.exception.ApiResponse.ApiResponse;
 import com.example.leave_management.security.JwtService;
 import com.example.leave_management.service.LeaveBalance.LeaveBalanceService;
 import jakarta.transaction.Transactional;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,66 +54,87 @@ public class AuthenticationService {
         this.leaveApplicationRepository = leaveApplicationRepository;
     }
 
-    public AuthenticationResponseDTO register(RegisterRequestDTO request) {
-        Optional<User> userExistsOptional = userRepository.findByEmail(request.getEmail());
-        if (userExistsOptional.isPresent()) {
-            return AuthenticationResponseDTO.builder()
-                    .token("The User Email Already Taken.")
+    public ApiResponse<String> register(RegisterRequestDTO request) {
+        try
+        {
+            Optional<User> userExistsOptional = userRepository.findByEmail(request.getEmail());
+            if (userExistsOptional.isPresent()) {
+                return new ApiResponse<>(false, "This Email Address has taken!!", HttpStatus.NOT_FOUND.value(), null, null);
+
+            }
+            var user = User.builder()
+                    .userName(request.getUserName())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(request.getRole())
+                    .Deleted(false)
                     .build();
+            userRepository.save(user);
+            leaveBalanceService.setCustomBalanceForNewUser(user.getUserId());
+            var jwtToken = jwtService.generateToken(user);
+            return new ApiResponse<>(true, "New User is created successfully!!", HttpStatus.OK.value(), jwtToken, null);
+        }catch (Exception e){
+            return new ApiResponse<>(false, "Failed to create a new user!!", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, List.of(e.getMessage()));
         }
-        var user = User.builder()
-                .userName(request.getUserName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
-                .Deleted(false)
-                .build();
-        userRepository.save(user);
-        leaveBalanceService.setCustomBalanceForNewUser(user.getUserId());
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponseDTO.builder().token(jwtToken).build();
+
     }
 
-    public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-        if (user.isDeleted()) {
-            throw new RuntimeException("User is flagged as deleted.");
+    public ApiResponse<String> authenticate(AuthenticationRequestDTO request) {
+        try
+        {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+            var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+            if (user.isDeleted()) {
+                throw new RuntimeException("User is flagged as deleted.");
+            }
+            var jwtToken = jwtService.generateToken(user);
+            return new ApiResponse<>(true, "Authentication Success!!", HttpStatus.OK.value(), jwtToken, null);
+        }catch (Exception e){
+            return new ApiResponse<>(false, "Authentication Failed!!", HttpStatus.NOT_FOUND.value(), null,List.of(e.getMessage()));
         }
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponseDTO.builder()
-                .token(jwtToken)
-                .build();
+
     }
 
-    public List<UserDTO> getUserListWithPagination(PageNumberRequestDTO paginationRequest) {
-        int pageNumber = paginationRequest.getCurrentPageNumber();
-        int pageSize = 5;
+    public ApiResponse<List<UserDTO>> getUserListWithPagination(PageNumberRequestDTO paginationRequest) {
+        try{
+            int pageNumber = paginationRequest.getCurrentPageNumber();
+            int pageSize = 5;
 
-        Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+            Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize);
 
-        Page<User> userPage = userRepository.findAll(pageRequest);
+            Page<User> userPage = userRepository.findAll(pageRequest);
 
-        String message = "Successfully retrieved user list with pagination.";
+            String message = "Successfully retrieved user list with pagination.";
 
-        return userPage.getContent().stream()
-                .map(this::convertToUserDTO)
-                .collect(Collectors.toList());
+            return new ApiResponse<>(true, message, HttpStatus.OK.value(),
+                    userPage.getContent().stream()
+                    .map(this::convertToUserDTO)
+                    .collect(Collectors.toList()), null);
+        }catch (Exception e){
+            return new ApiResponse<>(false, "Failed to retrieve user list!", HttpStatus.INTERNAL_SERVER_ERROR.value(),null, List.of(e.getMessage()));
+        }
+
     }
 
     private UserDTO convertToUserDTO(User user) {
         return getUserDTO(user);
     }
 
-    public UserDTO showUserLeaves(Long id){
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return getUserDTO(user);
+    public ApiResponse<UserDTO> showUserLeaves(Long id){
+        try{
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            return new ApiResponse<>(true, "Successful!", HttpStatus.OK.value(), getUserDTO(user), null) ;
+        }catch (Exception e){
+            return new ApiResponse<>(false, "Failed!", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, List.of(e.getMessage())) ;
+
+        }
+
     }
 
     private UserDTO getUserDTO(User user) {
@@ -130,36 +152,52 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public UserDTO updateUserName(Long userId, UpdateUserNameRequestDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
-        user.setUserName(request.getUserName());
-        userRepository.save(user);
-        return getUserDTO(user);
+    public ApiResponse<UserDTO> updateUserName(Long userId, UpdateUserNameRequestDTO request) {
+        try{
+            User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+            user.setUserName(request.getUserName());
+            userRepository.save(user);
+            return new ApiResponse<>(true, "UserName is Updated!!", HttpStatus.OK.value(), getUserDTO(user), null);
+        }catch (Exception e){
+            return new ApiResponse<>(false, "Failed To Update!!", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, List.of(e.getMessage()));
+        }
+
     }
     @Transactional
-    public UserDTO updatePasswordField(Long userId, UpdatePasswordRequestDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
-        if(passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-            userRepository.save(user);
+    public ApiResponse<UserDTO> updatePasswordField(Long userId, UpdatePasswordRequestDTO request) {
+        try{
+            User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+            if(passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+                userRepository.save(user);
+                return new ApiResponse<>(true, "User Password is updated Successfully!!", HttpStatus.OK.value(), getUserDTO(user), null);
+            }
+            return new ApiResponse<>(false, "Old Password Not Matched!!", HttpStatus.BAD_REQUEST.value(), null, null);
+        }catch (Exception e){
+            return new ApiResponse<>(false, "Update Failed!!", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, List.of(e.getMessage()));
         }
-        return getUserDTO(user);
+
     }
 
     @Transactional
-    public void deleteUserInformation(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        List<LeaveApplication> leaveApplications = leaveApplicationRepository.findByUser(user);
-        for (LeaveApplication leaveApplication : leaveApplications) {
-            leaveApplication.setDeleted(true);
-            leaveApplicationRepository.save(leaveApplication);
+    public ApiResponse<String> deleteUserInformation(Long userId) {
+        try{
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+            List<LeaveApplication> leaveApplications = leaveApplicationRepository.findByUser(user);
+            for (LeaveApplication leaveApplication : leaveApplications) {
+                leaveApplication.setDeleted(true);
+                leaveApplicationRepository.save(leaveApplication);
+            }
+            LeaveBalance balance = user.getLeaveBalance();
+            if (balance != null) {
+                balance.setDeleted(true);
+                leaveBalanceRepository.save(balance);
+            }
+            user.setDeleted(true);
+            userRepository.save(user);
+            return new ApiResponse<>(true, "User is successfully deleted along with all his information!!", HttpStatus.OK.value(), null, null);
+        }catch (Exception e){
+            return new ApiResponse<>(false, "Failed to delete the user!!", HttpStatus.OK.value(), null, List.of(e.getMessage()));
         }
-        LeaveBalance balance = user.getLeaveBalance();
-        if (balance != null) {
-            balance.setDeleted(true);
-            leaveBalanceRepository.save(balance);
-        }
-         user.setDeleted(true);
-         userRepository.save(user);
     }
 }

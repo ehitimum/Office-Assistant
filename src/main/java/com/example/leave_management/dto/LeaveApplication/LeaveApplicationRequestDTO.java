@@ -18,5 +18,4 @@ public class LeaveApplicationRequestDTO {
     private Long leaveTypeId;
     private LeaveStatus status;
     private String remarks;
-    private Long userId;
 }

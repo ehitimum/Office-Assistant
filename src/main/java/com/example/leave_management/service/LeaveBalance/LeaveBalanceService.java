@@ -1,12 +1,13 @@
 package com.example.leave_management.service.LeaveBalance;
 
 import com.example.leave_management.dto.LeaveBalance.CustomBalanceSetterDTO;
-import com.example.leave_management.dto.LeaveBalance.CustomLeaveBalanceSetResponseDTO;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
 import com.example.leave_management.domain.repository.LeaveBalanceRepository;
 import com.example.leave_management.domain.repository.UserRepository;
+import com.example.leave_management.exception.ApiResponse.ApiResponse;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -25,33 +26,42 @@ public class LeaveBalanceService {
         this.userRepository = userRepository;
     }
 
-    public CustomLeaveBalanceSetResponseDTO setCustomBalanceForNewUser(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public ApiResponse<?> setCustomBalanceForNewUser(Long userId){
+        try{
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-        var balance = LeaveBalance.builder()
-                .sickLeaveBalance(5)
-                .earnedLeaveBalance(0)
-                .negativeBalance(0)
-                .user(user)
-                .build();
-        leaveBalanceRepository.save(balance);
-        return CustomLeaveBalanceSetResponseDTO.builder().response("New User Leave Balance has set.").build();
+            var balance = LeaveBalance.builder()
+                    .sickLeaveBalance(5)
+                    .earnedLeaveBalance(0)
+                    .negativeBalance(0)
+                    .user(user)
+                    .build();
+            leaveBalanceRepository.save(balance);
+            return new ApiResponse<>(true, "New User Leave Balance has set!", HttpStatus.OK.value(), null, null);
+        }catch (Exception e){
+            return new ApiResponse<>(false, "Failed to set new balance!", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, List.of(e.getMessage()));
+        }
     }
 
     @Transactional
-    public CustomLeaveBalanceSetResponseDTO setCustomBalance(CustomBalanceSetterDTO request, Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public ApiResponse<String> setCustomBalance(CustomBalanceSetterDTO request, Long userId){
+        try{
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-        var balance = LeaveBalance.builder()
-                .sickLeaveBalance(request.getSickLeaveBalance())
-                .earnedLeaveBalance(request.getEarnedLeaveBalance())
-                .negativeBalance(request.getNegativeBalance())
-                .user(user)
-                .build();
-        leaveBalanceRepository.save(balance);
-        return CustomLeaveBalanceSetResponseDTO.builder().response("A new balance is updated.").build();
+            var balance = LeaveBalance.builder()
+                    .sickLeaveBalance(request.getSickLeaveBalance())
+                    .earnedLeaveBalance(request.getEarnedLeaveBalance())
+                    .negativeBalance(request.getNegativeBalance())
+                    .user(user)
+                    .build();
+            leaveBalanceRepository.save(balance);
+            return new ApiResponse<>(true, "A new balance is updated!", HttpStatus.OK.value(), null, null);
+        }catch (Exception ex){
+            return new ApiResponse<>(false, "Failed to update!", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, List.of(ex.getMessage()));
+        }
+
     }
 
     public void balanceDeduction(Long userId){

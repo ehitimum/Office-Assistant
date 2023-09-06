@@ -9,12 +9,12 @@ import com.example.leave_management.dto.Auth.UserDTO;
 import com.example.leave_management.dto.Bills.AcceptRejectBillRequestDTO;
 import com.example.leave_management.dto.Bills.BillsDTO;
 import com.example.leave_management.dto.Bills.UtilityRequestDTO;
-import com.example.leave_management.dto.Bills.UtilityResponseDTO;
-import com.example.leave_management.dto.LeaveApplication.ApplicationSubmissonResponseDTO;
+import com.example.leave_management.exception.ApiResponse.ApiResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,27 +29,40 @@ public class BillingService {
         this.userRepository = userRepository;
     }
 
-    public UtilityResponseDTO applyForUtilityBills(Long userId, UtilityRequestDTO request) {
-        User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
-        var bills = Bills.builder()
-                .billingTitle(request.getBillingTitle())
-                .comment(request.getComment())
-                .billCost(request.getBillCost())
-                .user(user)
-                .billStatus(request.getBillStatus())
-                .build();
-        billingRepository.save(bills);
-        return UtilityResponseDTO.builder().response("Success!").build();
+    public ApiResponse<String> applyForUtilityBills(Long userId, UtilityRequestDTO request) {
+        try
+        {
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+            var bills = Bills.builder()
+                    .billingTitle(request.getBillingTitle())
+                    .comment(request.getComment())
+                    .billCost(request.getBillCost())
+                    .user(user)
+                    .billStatus(request.getBillStatus())
+                    .build();
+            billingRepository.save(bills);
+            return new ApiResponse<>(true, "Success!", HttpStatus.OK.value(), null, null);
+        }catch (Exception ex){
+            return new ApiResponse<>(false, "Failed to submit the request!", HttpStatus.INTERNAL_SERVER_ERROR.value(),null,  List.of(ex.getMessage()));
+        }
     }
 
-    public List<BillsDTO> showAllPendingBillingRequest(int pageNumber){
-        var pageSize = 5;
-        Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-        Page<Bills> allPendingApplications = billingRepository.findPendingApplicationsByUserId(pageRequest);
-        String message = "Successfully retrieved user list with pagination.";
-        return allPendingApplications.getContent().stream()
-                .map(this::convertToBillsDTO)
-                .collect(Collectors.toList());
+    public ApiResponse<List<BillsDTO>>showAllPendingBillingRequest(int pageNumber){
+        try{
+            var pageSize = 5;
+            Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+            Page<Bills> allPendingApplications = billingRepository.findPendingApplicationsByUserId(pageRequest);
+            String message = "Successfully retrieved all pending list with pagination.";
+            List<BillsDTO> billsDTOS =  allPendingApplications.getContent().stream()
+                    .map(this::convertToBillsDTO)
+                    .collect(Collectors.toList());
+            return new ApiResponse<>(true, message, HttpStatus.OK.value(), billsDTOS, null);
+
+        }catch (Exception ex){
+            return new ApiResponse<>(false, "Failed to get the pending requests!", HttpStatus.INTERNAL_SERVER_ERROR.value(),null,  List.of(ex.getMessage()));
+
+        }
     }
 
     private BillsDTO convertToBillsDTO(Bills bills) {
@@ -79,14 +92,20 @@ public class BillingService {
     }
 
     @Transactional
-    public UtilityResponseDTO acceptOrRejectBillingRequest(AcceptRejectBillRequestDTO request) {
-        Bills bills = billingRepository.findById(request.getBillId())
-                .orElseThrow(()-> new RuntimeException("Bill ID does not exists!"));
-        bills.setBillStatus(request.getBillStatus());
-        bills.setComment(request.getComment());
-        billingRepository.save(bills);
+    public ApiResponse<String> acceptOrRejectBillingRequest(AcceptRejectBillRequestDTO request) {
+        try{
+            Bills bills = billingRepository.findById(request.getBillId())
+                    .orElseThrow(()-> new RuntimeException("Bill ID does not exists!"));
+            bills.setBillStatus(request.getBillStatus());
+            bills.setComment(request.getComment());
+            billingRepository.save(bills);
+            return new ApiResponse<>(true, "The Bills Request is " + request.getBillStatus(), HttpStatus.OK.value(),null,null);
+        }catch (Exception ex){
+            return new ApiResponse<>(false, "The Bills Request failed to update! ", HttpStatus.OK.value(),null, List.of(ex.getMessage()));
 
-        return UtilityResponseDTO.builder().response("The Bills Request is " + request.getBillStatus()).build();
+        }
+
+
     }
 
 
