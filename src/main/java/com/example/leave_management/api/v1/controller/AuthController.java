@@ -21,26 +21,26 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @RequestBody RegisterRequestDTO request
+            @Valid @RequestBody RegisterRequestDTO request
     ) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(
-            @RequestBody AuthenticationRequestDTO request
+            @Valid @RequestBody AuthenticationRequestDTO request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
     @GetMapping("/user-list")
     public ResponseEntity<?> getUserListWithPagination(
-            @RequestParam(name = "currentPageNumber") int currentPageNumber,
-            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize) {
+            @Valid @RequestParam(name = "currentPageNumber") int currentPageNumber,
+            @Valid @RequestParam(name = "pageSize", defaultValue = "5") int pageSize) {
         PageNumberRequestDTO pageNumberRequest = new PageNumberRequestDTO(currentPageNumber);
         return ResponseEntity.ok(authenticationService.getUserListWithPagination(pageNumberRequest));
     }
     
     @GetMapping("/yearly-leave/{userId}")
-    public ResponseEntity<?> getYearlyLeaveBalance(@PathVariable Long userId){
+    public ResponseEntity<?> getYearlyLeaveBalance(@Valid @PathVariable Long userId){
         return ResponseEntity.ok(authenticationService.showUserLeaves(userId));
     }
 
