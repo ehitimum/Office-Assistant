@@ -1,5 +1,6 @@
 package com.example.leave_management.dto.HolidayReqRes;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewHolidayRequestDTO {
+    @NotNull
     private String holidayName;
+    @NotNull
     private LocalDate holidayStartDate;
+    @NotNull
     private Integer totalHoliday;
 }

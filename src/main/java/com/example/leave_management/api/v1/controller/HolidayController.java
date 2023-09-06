@@ -4,6 +4,7 @@ import com.example.leave_management.domain.model.Holidays.Holidays;
 import com.example.leave_management.dto.HolidayReqRes.NewHolidayRequestDTO;
 import com.example.leave_management.exception.ApiResponse.ApiResponse;
 import com.example.leave_management.service.Holiday.HolidayService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,11 +20,11 @@ public class HolidayController {
 
     private final HolidayService holidayService;
     @PostMapping("/create-holidays")
-    public ResponseEntity<?> addNewHolidays(@RequestBody List<Holidays> holidays){
+    public ResponseEntity<?> addNewHolidays(@Valid @RequestBody List<Holidays> holidays){
         return ResponseEntity.ok(holidayService.createNewHolidays(holidays));
     }
     @PostMapping("/create-a-holiday")
-    public ResponseEntity<?> addAHoliday(@RequestBody NewHolidayRequestDTO request){
+    public ResponseEntity<?> addAHoliday(@Valid @RequestBody NewHolidayRequestDTO request){
         return ResponseEntity.ok(holidayService.createOneHoliday(request));
     }
     @GetMapping("/show-HolidayList")
@@ -36,12 +37,12 @@ public class HolidayController {
     }
 
     @PutMapping("/update-holiday-info/{holidayId}")
-    public ResponseEntity<?> updateHoliday(@PathVariable Long holidayId, @RequestBody NewHolidayRequestDTO requestDTO) {
+    public ResponseEntity<?> updateHoliday(@PathVariable Long holidayId, @Valid @RequestBody NewHolidayRequestDTO requestDTO) {
         return ResponseEntity.ok(holidayService.updateHoliday(holidayId, requestDTO));
     }
 
     @PostMapping("/link")
-    public ResponseEntity<?> linkHolidaysToUser(@RequestParam("userId") Long userId, @RequestBody List<Long> holidayIds) {
+    public ResponseEntity<?> linkHolidaysToUser(@RequestParam("userId") Long userId, @Valid @RequestBody List<Long> holidayIds) {
         return ResponseEntity.ok(holidayService.linkHolidaysToUser(userId, holidayIds));
     }
 
