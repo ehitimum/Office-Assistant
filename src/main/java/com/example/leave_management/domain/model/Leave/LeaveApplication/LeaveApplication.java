@@ -30,7 +30,7 @@ public class LeaveApplication {
             referencedColumnName = "leaveTypeId"
     )
     private LeaveType leaveTypeId;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private LeaveStatus leaveStatus;
     private String remarks;
     @ManyToOne(

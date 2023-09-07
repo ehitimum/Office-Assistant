@@ -1,5 +1,6 @@
 package com.example.leave_management.service.LeaveApplication;
 
+import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveStatus;
 import com.example.leave_management.dto.LeaveApplication.LeaveApplicationRequestDTO;
 import com.example.leave_management.dto.LeaveApplication.UpdateApplicationReqDTO;
 import com.example.leave_management.domain.model.Leave.LeaveApplication.LeaveApplication;
@@ -32,6 +33,7 @@ public class LeaveApplicationService {
 
     private final LeaveTypeRepository leaveTypeRepository;
 
+
     public LeaveApplicationService(LeaveApplicationRepository repository, UserRepository userRepository, LeaveBalanceService balanceService, LeaveTypeRepository leaveTypeRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
@@ -41,15 +43,19 @@ public class LeaveApplicationService {
 
     public ApiResponse<String> saveApplicationRequest(Long userId,LeaveApplicationRequestDTO request){
         try{
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            LeaveType leaveType = leaveTypeRepository.findById(request.getLeaveTypeId())
-                    .orElseThrow(() -> new RuntimeException("There is no such Leave Type Available Yet."));
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+            LeaveType leaveType = leaveTypeRepository.findById(request.getLeaveTypeId()).orElseThrow(() -> new RuntimeException("There is no such Leave Type Available Yet."));
+            var start = request.getLeave_begin();
+            var end = request.getLeave_end();
+            var type = request.getLeaveTypeId();
+            if((type == 2)&&(ChronoUnit.DAYS.between(start,end)> user.getLeaveBalance().getSickLeaveBalance())){
+                return new ApiResponse<>(false, "Sick LEave Balance is to big!!", HttpStatus.OK.value(), null, null);
+            }
             var application = LeaveApplication.builder()
-                    .leave_begin(request.getLeave_begin())
-                    .leave_end(request.getLeave_end())
+                    .leave_begin(start)
+                    .leave_end(end)
                     .leaveTypeId(leaveType)
-                    .leaveStatus(request.getStatus())
+                    .leaveStatus(LeaveStatus.PENDING)
                     .remarks(request.getRemarks())
                     .user(user)
                     .build();

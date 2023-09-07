@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BillingRepository extends JpaRepository<Bills, Long> {
 
-    @Query("SELECT bi FROM Bills bi WHERE bi.billStatus = 'PENDING' AND bi.user.Deleted = false")
+    @Query("SELECT bi FROM Bills bi WHERE bi.billStatus = 0 AND bi.user.Deleted = false")
     Page<Bills> findPendingApplicationsByUserId(Pageable pageRequest);
 }

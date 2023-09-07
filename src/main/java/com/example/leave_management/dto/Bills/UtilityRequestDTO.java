@@ -14,5 +14,4 @@ public class UtilityRequestDTO {
     private String billingTitle;
     private String comment;
     private Integer billCost;
-    private BillStatus billStatus;
 }

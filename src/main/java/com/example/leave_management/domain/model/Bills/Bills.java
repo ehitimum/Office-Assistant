@@ -19,7 +19,7 @@ public class Bills {
     private String billingTitle;
     private String comment;
     private Integer billCost;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private BillStatus billStatus;
     @Column(columnDefinition = "boolean default false")
     private boolean Deleted;

@@ -1,5 +1,6 @@
 package com.example.leave_management.service.Bills;
 
+import com.example.leave_management.domain.model.Bills.BillStatus;
 import com.example.leave_management.domain.model.Bills.Bills;
 import com.example.leave_management.domain.model.User.Balance.LeaveBalance;
 import com.example.leave_management.domain.model.User.User;
@@ -30,8 +31,7 @@ public class BillingService {
     }
 
     public ApiResponse<String> applyForUtilityBills(Long userId, UtilityRequestDTO request) {
-        try
-        {
+        try {
             User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
             var bills = Bills.builder()
@@ -39,14 +39,21 @@ public class BillingService {
                     .comment(request.getComment())
                     .billCost(request.getBillCost())
                     .user(user)
-                    .billStatus(request.getBillStatus())
+                    .billStatus(BillStatus.PENDING)
                     .build();
             billingRepository.save(bills);
+
             return new ApiResponse<>(true, "Success!", HttpStatus.OK.value(), null, null);
-        }catch (Exception ex){
-            return new ApiResponse<>(false, "Failed to submit the request!", HttpStatus.INTERNAL_SERVER_ERROR.value(),null,  List.of(ex.getMessage()));
+        } catch (Exception ex) {
+            return new ApiResponse<>(false, "Failed to submit the request!", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, List.of(ex.getMessage()));
         }
     }
+
+
+
+
+
+
 
     public ApiResponse<List<BillsDTO>>showAllPendingBillingRequest(int pageNumber){
         try{

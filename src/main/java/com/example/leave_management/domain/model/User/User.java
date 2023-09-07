@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private String userName;
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Role role;
     @Column(columnDefinition = "boolean default false")
     private boolean Deleted;

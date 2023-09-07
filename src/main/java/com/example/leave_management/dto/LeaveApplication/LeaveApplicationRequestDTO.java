@@ -16,6 +16,5 @@ public class LeaveApplicationRequestDTO {
     private LocalDate leave_begin;
     private LocalDate leave_end;
     private Long leaveTypeId;
-    private LeaveStatus status;
     private String remarks;
 }
